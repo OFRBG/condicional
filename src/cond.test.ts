@@ -112,6 +112,18 @@ describe('ap', () => {
     expect(fn(101)).toBe('catchall2')
   })
 
+  it('matches with userland objects', () => {
+    const fn = ap`
+    {>0
+        ${{ 5: 'v2', 6: 'v3' }}
+    } catchall1
+    `
+
+    expect(fn(-1)).toBe('catchall1')
+    expect(fn(5)).toBe('v2')
+    expect(fn(6)).toBe('v3')
+  })
+
   it.fails('matches with userland conditionals', () => {
     const fn = ap`
     {>0
