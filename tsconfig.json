@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "cond",
+  "display": "condcional",
   "extends": "@tsconfig/esm/tsconfig.json",
   "compilerOptions": {
     "lib": ["ES2015"],

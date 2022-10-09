@@ -1,14 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "cond",
+  "name": "condicional",
   "version": "0.0.1",
   "description": "Better mapping",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OFRBG/cond.git"
+    "url": "git+https://github.com/OFRBG/condicional.git"
   },
   "bugs": {
-    "url": "https://github.com/OFRBG/cond/issues"
+    "url": "https://github.com/OFRBG/condicional/issues"
   },
   "author": "Oscar Fonseca <oscar.fonseca@formidable.com>",
   "license": "MIT",

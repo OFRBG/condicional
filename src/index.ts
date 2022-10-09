@@ -1,1 +1,1 @@
-export { cond as default } from './cond'
+export { mapper as default } from './mapper'

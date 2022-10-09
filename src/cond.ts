@@ -1,43 +1,29 @@
-import { parse } from './generated/parser'
+import { mapper, Mapping } from './mapper'
 
-export type Mapping<T extends string = string> = {
-  [Key in `$$${number}` | string]: Mapping<T> | T
-}
+export function cond<T extends string>(...arg: Parameters<typeof mapper>) {
+  const { map, functions } = mapper<T>(...arg)
 
-export type Cond<T extends string> = {
-  map: Mapping<T>
-  functions: Record<string, Function>
-}
+  return (value: any): T | undefined => {
+    let current: Mapping<T> | T = map
 
-function builder(
-  strings: TemplateStringsArray,
-  ...placeholders: unknown[]
-): [string, Record<string, Function>] {
-  let res = strings[0]
-  let functions = {}
+    while (typeof current === 'object') {
+      if (current[value]) {
+        current = current[value]
+        continue
+      }
 
-  for (let i = 1; i < strings.length; i++) {
-    const placeholder = placeholders[i - 1]
-    const isFunction = typeof placeholder === 'function'
+      let match: Mapping<T> | T
 
-    const input = isFunction ? '$' + i : placeholder
-    isFunction && (functions['$' + i] = placeholder)
+      for (const key of Object.keys(current)) {
+        if (key[0] === '$' && functions[key](value)) {
+          match = current[key]
+          break
+        }
+      }
 
-    res += `<${JSON.stringify(input)}>${strings[i]}`
-  }
+      current = match ?? current['*']
+    }
 
-  return [res, functions]
-}
-
-export function cond<T extends string>(
-  ...arg: Parameters<typeof builder>
-): Cond<T> {
-  const [res, userFunctions] = builder(...arg)
-
-  const { functions, map } = <Cond<T>>parse(res.trim())
-
-  return {
-    map,
-    functions: { ...functions, ...userFunctions },
+    return current
   }
 }
