@@ -32,12 +32,15 @@ EXP
   }
 
 PAIR
-  = "{"? _ key:KEY _ ":"? _ value:PREDICATE _ "}"? {
+  = key:KEY _ ":"? _ value:VALUE {
     return { [key]: value };
   }
   
 KEY
   = JSON / WORD / CONDITION
+
+VALUE
+  = JSON / WORD / ("{" _ @EXP _ "}")
 
 CONDITION
   = op:OPERATOR _ number:NUMBER {
@@ -45,17 +48,14 @@ CONDITION
     functions[key] = (input) => getOp(op, input, number);
     return key;
   }
-
-OPERATOR
-  = ">" / "<" / "="
-
-PREDICATE
-  = JSON / WORD / ("{" _ @EXP _ "}")
   
 JSON
   = json:('<' @($[^\<\>]*) '>') {
     return JSON.parse(json);
   }
+
+OPERATOR
+  = ">" / "<" / "="
 
 NUMBER "number"
   = ("-" / "+")? INT FRAC? {
