@@ -1,3 +1,14 @@
+{{
+  function getOp(op, a, b) {
+    return {
+      ">": (a, b) => a > b,
+      "<": (a, b) => a < b,
+      "<=": (a, b) => a <= b,
+      ">=": (a, b) => a >= b
+    }[op](a,b)
+  }
+}}
+
 {
   const functions = {}
   let functionCounter = 0
@@ -26,12 +37,12 @@ PAIR
   }
   
 KEY
-  = CONDITION/WORD
+  = JSON/WORD/CONDITION
 
 CONDITION
-  = op:OPERATOR _ word:NUMBER {
+  = op:OPERATOR _ number:NUMBER {
     const key = "$$" + ++functionCounter
-    functions[key] = (input) => eval(input + op + word);
+    functions[key] = (input) => getOp(op, input, number)
     return key
   }
 
