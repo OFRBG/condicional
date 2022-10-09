@@ -5,28 +5,28 @@
       "<": (a, b) => a < b,
       "<=": (a, b) => a <= b,
       ">=": (a, b) => a >= b
-    }[op](a,b)
+    }[op](a,b);
   }
 }}
 
 {
-  const functions = {}
-  let functionCounter = 0
+  const functions = {};
+  let functionCounter = 0;
 }
 
 start = map:EXP {
-    return { map, functions }
+    return { map, functions };
   }
 
 EXP
   = head:PAIR tail:(_ @PAIR*) _ catchall:WORD? {
-    const map = head
+    const map = head;
     
     for (let i = 0; i < tail.length; i++) {
-      Object.assign(map, tail[i])
+      Object.assign(map, tail[i]);
     }
     
-    catchall && Object.assign(map, {"*": catchall})
+    catchall && Object.assign(map, {"*": catchall});
     
     return map;
   }
@@ -37,20 +37,20 @@ PAIR
   }
   
 KEY
-  = JSON/WORD/CONDITION
+  = JSON / WORD / CONDITION
 
 CONDITION
   = op:OPERATOR _ number:NUMBER {
-    const key = "$$" + ++functionCounter
-    functions[key] = (input) => getOp(op, input, number)
-    return key
+    const key = "$$" + ++functionCounter;
+    functions[key] = (input) => getOp(op, input, number);
+    return key;
   }
 
 OPERATOR
   = ">"/"<"/"="
 
 PREDICATE
-  = JSON/WORD/EXP
+  = JSON / WORD / EXP
   
 JSON
   = json:('<' @($[^\<\>]*) '>') {
@@ -58,35 +58,24 @@ JSON
   }
 
 NUMBER "number"
-  = MINUS? INT FRAC? {
+  = ("-"/"+")? INT FRAC? {
     return parseFloat(text());
   }
 
-DECIMAL_POINT
-  = "."
+FRAC
+  = "." DIGIT+
+
+INT
+  = "0" / (DIGIT1_9 DIGIT*)
+
+WORD
+  = $[a-z0-9_]i+
 
 DIGIT1_9
   = [1-9]
 
-FRAC
-  = DECIMAL_POINT DIGIT+
-
-INT
-  = ZERO / (DIGIT1_9 DIGIT*)
-
-MINUS
-  = "-"
-
-PLUS
-  = "+"
-
-ZERO
-  = "0"
-
-DIGIT
+DIGIT 
   = [0-9]
 
-WORD
-  = $[a-z0-9_]i+
 _
   = [ \t\n\r]*
