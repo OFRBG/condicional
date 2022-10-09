@@ -14,7 +14,8 @@
   "license": "MIT",
   "type": "module",
   "publishConfig": {
-    "@OFRBG:registry": "https://npm.pkg.github.com"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "files": [
     "dist"
