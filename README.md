@@ -53,10 +53,6 @@ cond`
 `
 ```
 
-### Prerequisites
-
-`usePq` has a peer dependency on React 17+.
-
 ### Installation
 
 ```sh
