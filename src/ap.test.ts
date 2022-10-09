@@ -38,7 +38,7 @@ describe('ap', () => {
     expect(fn(101)).toBe('catchall2')
   })
 
-  it.fails('matches with userland key objects', () => {
+  it.fails('matches with input key objects', () => {
     const fn = ap`
     { ${{ 5: 'v2', 6: 'v3' }} v1 } catchall1
     `
@@ -46,7 +46,7 @@ describe('ap', () => {
     expect(fn(5)).toBe('v3')
   })
 
-  it('matches with userland predicate objects', () => {
+  it('matches with input predicate objects', () => {
     const fn = ap`
     >0 ${{ 5: 'v2', 6: 'v3' }}
     catchall1
@@ -57,19 +57,19 @@ describe('ap', () => {
     expect(fn(6)).toBe('v3')
   })
 
-  it('matches with userland conditionals', () => {
+  it('matches with input conditionals', () => {
     const fn = ap`
     ${(v) => v < 10} v1
     ${(v) => v > 10} v2
-    catchall1
+    ${(v) => v === 10} v3
     `
 
     expect(fn(-1)).toBe('v1')
     expect(fn(11)).toBe('v2')
-    expect(fn(10)).toBe('catchall1')
+    expect(fn(10)).toBe('v3')
   })
 
-  it('matches with nested userland conditionals', () => {
+  it('matches with nested input conditionals', () => {
     const isEven = (v) => Number(v) % 2 === 0
 
     const fn = ap`
