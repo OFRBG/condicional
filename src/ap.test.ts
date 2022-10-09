@@ -84,4 +84,20 @@ describe('ap', () => {
     expect(fn(6)).toBe('0')
     expect(fn(5)).toBe('1')
   })
+
+  it('matches with types', () => {
+    const isEven = (v) => Number(v) % 2 === 0
+
+    const fn = ap`
+    ${(v) => v < 10} {
+      ${isEven} 0
+      1
+    } 
+    catchall1
+    `
+
+    expect(fn(11)).toBe('catchall1')
+    expect(fn(6)).toBe('0')
+    expect(fn(5)).toBe('1')
+  })
 })

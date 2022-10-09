@@ -1,11 +1,11 @@
 import { parse } from './generated/parser'
 
-export type Mapping = {
-  [Key in `$$${number}` | string]: Mapping | string
+export type Mapping<T extends string = string> = {
+  [Key in `$$${number}` | string]: Mapping<T> | T
 }
 
-export type Cond = {
-  map: Mapping
+export type Cond<T extends string> = {
+  map: Mapping<T>
   functions: Record<string, Function>
 }
 
@@ -29,10 +29,12 @@ function builder(
   return [res, functions]
 }
 
-export function cond(...arg: Parameters<typeof builder>): Cond {
+export function cond<T extends string>(
+  ...arg: Parameters<typeof builder>
+): Cond<T> {
   const [res, userFunctions] = builder(...arg)
 
-  const { functions, map } = <Cond>parse(res.trim())
+  const { functions, map } = <Cond<T>>parse(res.trim())
 
   return {
     map,
