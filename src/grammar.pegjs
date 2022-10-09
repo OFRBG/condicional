@@ -19,20 +19,20 @@ start = map:EXP {
   }
 
 EXP
-  = head:PAIR tail:(_ @PAIR*) _ catchall:WORD? {
+  = head:PAIR tail:(_ @PAIR)* _ catchall:WORD? {
     const map = head;
     
     for (let i = 0; i < tail.length; i++) {
       Object.assign(map, tail[i]);
     }
     
-    catchall && Object.assign(map, {"*": catchall});
+    catchall && Object.assign(map, { "*": catchall });
     
     return map;
   }
 
 PAIR
-  = "{" _ key:KEY _ ":"? _ value:PREDICATE _ "}" {
+  = "{"? _ key:KEY _ ":"? _ value:PREDICATE _ "}"? {
     return { [key]: value };
   }
   
@@ -47,10 +47,10 @@ CONDITION
   }
 
 OPERATOR
-  = ">"/"<"/"="
+  = ">" / "<" / "="
 
 PREDICATE
-  = JSON / WORD / EXP
+  = JSON / WORD / ("{" _ @EXP _ "}")
   
 JSON
   = json:('<' @($[^\<\>]*) '>') {
@@ -58,7 +58,7 @@ JSON
   }
 
 NUMBER "number"
-  = ("-"/"+")? INT FRAC? {
+  = ("-" / "+")? INT FRAC? {
     return parseFloat(text());
   }
 

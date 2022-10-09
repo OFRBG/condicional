@@ -3,8 +3,8 @@ import { ap } from './ap'
 describe('ap', () => {
   it('matches simple objects', () => {
     const result = ap`
-    {k1 v1}
-    {k2 v2}
+    k1 v1
+    k2 v2
     `('k1')
 
     expect(result).toBe('v1')
@@ -12,8 +12,8 @@ describe('ap', () => {
 
   it('matches conditionals', () => {
     const fn = ap`
-    {>0 v1}
-    {<-10 v2}
+    >0 v1
+    <-10 v2
     catchall
     `
 
@@ -24,11 +24,12 @@ describe('ap', () => {
 
   it('matches nested conditionals', () => {
     const fn = ap`
-    {>0
-        {<10 v2}
-        {<100 v3}
-        catchall2
-    } catchall1
+    >0 {
+      <10 v2
+      <100 v3
+      catchall2
+    }
+    catchall1
     `
 
     expect(fn(-1)).toBe('catchall1')
@@ -47,9 +48,8 @@ describe('ap', () => {
 
   it('matches with userland predicate objects', () => {
     const fn = ap`
-    {>0
-        ${{ 5: 'v2', 6: 'v3' }}
-    } catchall1
+    >0 ${{ 5: 'v2', 6: 'v3' }}
+    catchall1
     `
 
     expect(fn(-1)).toBe('catchall1')
@@ -59,18 +59,24 @@ describe('ap', () => {
 
   it('matches with userland conditionals', () => {
     const fn = ap`
-    {${(v) => v < 10} v1}
+    ${(v) => v < 10} v1
+    ${(v) => v > 10} v2
     catchall1
     `
 
     expect(fn(-1)).toBe('v1')
+    expect(fn(11)).toBe('v2')
+    expect(fn(10)).toBe('catchall1')
   })
 
   it('matches with nested userland conditionals', () => {
     const isEven = (v) => Number(v) % 2 === 0
 
     const fn = ap`
-    {${(v) => v < 10} {${isEven} 0} 1}
+    ${(v) => v < 10} {
+      ${isEven} 0
+      1
+    } 
     catchall1
     `
 
