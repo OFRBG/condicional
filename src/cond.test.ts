@@ -1,4 +1,4 @@
-import { ap, cond } from './cond'
+import { cond } from './cond'
 
 const pair = (k: string, v: unknown) => ({ [k]: v })
 const shape = (map: unknown, functions: unknown = {}) => ({ map, functions })
@@ -72,70 +72,5 @@ describe('cond', () => {
 
     expect(result.functions['$$2'](9)).toBe(true)
     expect(result.functions['$$2'](11)).toBe(false)
-  })
-})
-
-describe('ap', () => {
-  it('matches simple objects', () => {
-    const result = ap`
-    {k1 v1}
-    {k2 v2}
-    `('k1')
-
-    expect(result).toBe('v1')
-  })
-
-  it('matches conditionals', () => {
-    const fn = ap`
-    {>0 v1}
-    {<-10 v2}
-    catchall
-    `
-
-    expect(fn(22)).toBe('v1')
-    expect(fn(-11)).toBe('v2')
-    expect(fn(-2)).toBe('catchall')
-  })
-
-  it('matches nested conditionals', () => {
-    const fn = ap`
-    {>0
-        {<10 v2}
-        {<100 v3}
-        catchall2
-    } catchall1
-    `
-
-    expect(fn(-1)).toBe('catchall1')
-    expect(fn(9)).toBe('v2')
-    expect(fn(55)).toBe('v3')
-    expect(fn(101)).toBe('catchall2')
-  })
-
-  it('matches with userland objects', () => {
-    const fn = ap`
-    {>0
-        ${{ 5: 'v2', 6: 'v3' }}
-    } catchall1
-    `
-
-    expect(fn(-1)).toBe('catchall1')
-    expect(fn(5)).toBe('v2')
-    expect(fn(6)).toBe('v3')
-  })
-
-  it.fails('matches with userland conditionals', () => {
-    const fn = ap`
-    {>0
-        {${(v) => v < 10} v2}
-        {<100 v3}
-        catchall2
-    } catchall1
-    `
-
-    expect(fn(-1)).toBe('catchall1')
-    expect(fn(9)).toBe('v2')
-    expect(fn(55)).toBe('v3')
-    expect(fn(101)).toBe('catchall2')
   })
 })
