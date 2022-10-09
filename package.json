@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "cond",
+  "version": "0.0.1",
+  "description": "Better mapping",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OFRBG/cond.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OFRBG/cond/issues"
+  },
+  "author": "Oscar Fonseca <oscar.fonseca@formidable.com>",
+  "license": "MIT",
+  "type": "module",
+  "publishConfig": {
+    "@OFRBG:registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs"
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build-parser": "peggy --plugin ./node_modules/ts-pegjs --cache -o ./src/generated/parser.ts ./src/grammar.pegjs",
+    "build-fast": "tsup src/index.ts --format cjs,esm",
+    "build": "pnpm build-parser && pnpm build-fast --dts-resolve",
+    "test": "vitest",
+    "prepublishOnly": "pnpm build"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.2",
+    "@commitlint/config-conventional": "^17.0.2",
+    "@tsconfig/esm": "^1.0.0",
+    "@types/prettier": "^2.6.3",
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1",
+    "tsup": "^6.1.2",
+    "typescript": "^4.7.3",
+    "vite": "^3.1.6",
+    "vitest": "^0.14.2"
+  },
+  "dependencies": {
+    "peggy": "^2.0.1",
+    "ts-pegjs": "^2.1.0"
+  }
+}

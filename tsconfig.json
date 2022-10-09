@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "cond",
+  "extends": "@tsconfig/esm/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2015"],
+    "moduleResolution": "node",
+    "target": "ES2015",
+    "allowSyntheticDefaultImports": true,
+    "types": ["vitest/globals"]
+  },
+  "include": ["src"]
+}
