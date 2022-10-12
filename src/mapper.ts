@@ -1,17 +1,25 @@
 import { parse } from './generated/parser'
 
-export type Mapping<T extends string = string> = {
+export type Mapping<T = string> = {
   [Key in `$$${number}` | string]: Mapping<T> | T
 }
 
-export type Cond<T extends string> = {
+export type Cond<T> = {
   map: Mapping<T>
   functions: Record<string, Function>
 }
 
-function builder(
+type Placeholder =
+  | Function
+  | ((input: number) => boolean)
+  | ((input: string) => boolean)
+  | string
+  | number
+  | Record<string, unknown>
+
+function builder<T extends Placeholder>(
   strings: TemplateStringsArray,
-  ...placeholders: unknown[]
+  ...placeholders: T[]
 ): [string, Record<string, Function>] {
   let res = strings[0]
   let functions = {}
@@ -29,9 +37,7 @@ function builder(
   return [res, functions]
 }
 
-export function mapper<T extends string>(
-  ...arg: Parameters<typeof builder>
-): Cond<T> {
+export function mapper<T>(...arg: Parameters<typeof builder>): Cond<T> {
   const [res, userFunctions] = builder(...arg)
 
   const { functions, map } = <Cond<T>>parse(res.trim())

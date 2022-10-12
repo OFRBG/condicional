@@ -1,6 +1,6 @@
 import { mapper, Mapping } from './mapper'
 
-export function cond<T extends string>(...arg: Parameters<typeof mapper>) {
+export function cond<T>(...arg: Parameters<typeof mapper>) {
   const { map, functions } = mapper<T>(...arg)
 
   return (value: any): T | undefined => {
@@ -22,6 +22,10 @@ export function cond<T extends string>(...arg: Parameters<typeof mapper>) {
       }
 
       current = match ?? current['*']
+    }
+
+    if (typeof current === 'string' && current[0] === '$') {
+      return functions[current] as T
     }
 
     return current
