@@ -19,7 +19,7 @@ start = map:EXP {
   }
 
 EXP
-  = head:PAIR tail:(_ @PAIR)* _ catchall:WORD? {
+  = head:PAIR tail:(_ @PAIR)* _ catchall:VALUE? {
     const map = head;
     
     for (let i = 0; i < tail.length; i++) {

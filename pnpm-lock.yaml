@@ -7,6 +7,8 @@ specifiers:
   '@testing-library/react': ^13.4.0
   '@tsconfig/esm': ^1.0.0
   '@types/prettier': ^2.6.3
+  '@types/react': ^18.0.21
+  '@types/testing-library__jest-dom': ^5.14.5
   husky: ^8.0.1
   jsdom: ^20.0.1
   peggy: ^2.0.1
@@ -31,6 +33,8 @@ devDependencies:
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
   '@tsconfig/esm': 1.0.2
   '@types/prettier': 2.7.1
+  '@types/react': 18.0.21
+  '@types/testing-library__jest-dom': 5.14.5
   husky: 8.0.1
   jsdom: 20.0.1
   prettier: 2.7.1

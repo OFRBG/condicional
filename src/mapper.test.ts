@@ -55,6 +55,13 @@ describe('mapper', () => {
     expect(result.functions['$$1'](-1)).toBe(false)
   })
 
+  it('parses without static values', () => {
+    const result = mapper`${1} ${'v1'} ${2}`
+    const expected = shape({ ...pair('1', 'v1'), ...pair('*', 2) })
+
+    expect(result.map).toEqual(expected.map)
+  })
+
   it('parses nested conditions', () => {
     const result = mapper`>0 {<10 v1}`
 
