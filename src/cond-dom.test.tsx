@@ -33,4 +33,28 @@ describe('<Cond />', () => {
     expect(screen.getByText('div')).toBeInTheDocument()
     expect(screen.getByTestId('div')).toBeInTheDocument()
   })
+
+  it('has passthrough props', () => {
+    const hasAriaLabel = (props) => !!props['aria-label']
+
+    const mapper = cond<JSXElementConstructor<unknown>>`
+    ${hasAriaLabel} ${Div}
+    ${Span}
+    `
+
+    const Cond = (props) => {
+      const Component = mapper(props)
+      return <Component {...props} />
+    }
+
+    render(
+      <Wrapper>
+        <Cond aria-label="label">div</Cond>
+      </Wrapper>
+    )
+
+    expect(screen.getByText('div')).toBeInTheDocument()
+    expect(screen.getByTestId('div')).toBeInTheDocument()
+    expect(screen.getByTestId('div')).toHaveAttribute('aria-label', 'label')
+  })
 })

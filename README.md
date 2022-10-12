@@ -53,6 +53,21 @@ cond`
 `
 ```
 
+`condicional` stores your functions, so you can create conditional components
+
+```tsx
+const mapper = cond<JSXElementConstructor>`
+  ${isError} ${ErrorIcon} 
+  ${isWarning} ${WarningIcon}
+  ${OfflineIcon}
+`
+
+const StatusIcon = (props) => {
+  const Component = mapper(props)
+  return <Component {...props} />
+}
+```
+
 ### Installation
 
 ```sh
