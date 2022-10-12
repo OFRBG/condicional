@@ -53,21 +53,6 @@ cond`
 `
 ```
 
-`condicional` stores your functions, so you can create conditional components
-
-```tsx
-const mapper = cond<JSXElementConstructor>`
-  ${isError} ${ErrorIcon} 
-  ${isWarning} ${WarningIcon}
-  ${OfflineIcon}
-`
-
-const StatusIcon = (props) => {
-  const Component = mapper(props)
-  return <Component {...props} />
-}
-```
-
 ### Installation
 
 ```sh
@@ -90,4 +75,24 @@ const mapper = cond`
 mapper(10) === '0' // true
 mapper(5) === '1' // true
 mapper(0.5) === 'not an integer' // true
+```
+
+`condicional` stores your functions, so you can create stable conditional components
+
+```tsx
+const isError = ({ type }) => type === 'error'
+const isWarning = ({ type }) => type === 'warning'
+
+const mapper = cond<JSXElementConstructor>`
+  ${isError} ${ErrorIcon} 
+  ${isWarning} ${WarningIcon}
+  ${OfflineIcon}
+`
+
+const StatusIcon = (props) => {
+  const Component = mapper(props)
+  return <Component {...props} />
+}
+
+// <StatusIcon type="error" size="small" /> renders <ErrorIcon type="error" size="small" />
 ```
